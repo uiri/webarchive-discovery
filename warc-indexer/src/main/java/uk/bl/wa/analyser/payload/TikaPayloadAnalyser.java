@@ -32,6 +32,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.apache.commons.io.input.BoundedInputStream;
 import org.apache.commons.lang.StringUtils;
@@ -97,7 +98,7 @@ mime_exclude = x-tar,x-gzip,bz,lz,compress,zip,javascript,css,octet-stream,image
     private Tika tika;
     
     /** Maximum number of characters of text to pull out of any given resource: */
-    private int max_text_length; 
+    private int max_text_length = -1;
 
     /** Whether or not to use the Boilerpipe boilerplate remover */
     private boolean useBoilerpipe;
@@ -113,6 +114,8 @@ mime_exclude = x-tar,x-gzip,bz,lz,compress,zip,javascript,css,octet-stream,image
     
     public TikaPayloadAnalyser() {
         this.tika = new Tika();
+	this.tika.setMaxStringLength(-1);
+	this.excludes = new ArrayList<String>();
     }
 
     /**
@@ -303,7 +306,7 @@ mime_exclude = x-tar,x-gzip,bz,lz,compress,zip,javascript,css,octet-stream,image
             // Copy the body text, forcing a UTF-8 encoding:
             String output = new String( content.toString().getBytes( "UTF-8" ) );
             if( runner.complete || !output.equals( "" ) ) {
-                if( output.length() > this.max_text_length ) {
+                if( output.length() > this.max_text_length && this.max_text_length > 0 ) {
                     output = output.substring(0, this.max_text_length);
                 }
                 log.debug("Extracted text from: " + url + " in " + source);

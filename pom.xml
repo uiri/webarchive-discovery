@@ -137,7 +137,7 @@
             <configuration>
                <licenseName>gpl_v2</licenseName>
                <verbose>false</verbose>
-               <canUpdateCopyright>true</canUpdateCopyright>
+               <canUpdateCopyright>false</canUpdateCopyright>
                <roots>
                   <root>src/main/java</root>
                   <root>src/test/java</root>
